@@ -1,11 +1,8 @@
-var express = require("express");
-// 引入express
+require('babel-register');
+const port = 3000;
+const app = require('./config/express');
+const mongoose = require('./config/mongoose');
 
-const app = new express();
-// 实例 express
+mongoose.connect();
 
-app.get('/', function(req, res, nuxt){
-    res.send('hello word')
-})
-
-app.listen(3000, console.log(`node start 3000`))
+app.listen(port, () => console.log(`server started on port ${port}`));
