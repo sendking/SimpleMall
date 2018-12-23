@@ -10,7 +10,7 @@ git clone https://github.com/Jhaidi/SimpleMall.git
 
 npm install
 
-node ./index.js
+npm run dev
 ```
 
 终端执行成功 打开浏览器 输入http://localhost:3000
