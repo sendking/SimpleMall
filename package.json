@@ -25,6 +25,10 @@
   },
   "homepage": "https://github.com/Jhaidi/SimpleMall#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "babel-register": "^6.26.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.0",
+    "morgan": "^1.9.1"
   }
 }
