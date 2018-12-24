@@ -1,8 +1,8 @@
 require('babel-register');
-const port = 3000;
+const config = require('./config/config');
 const app = require('./config/express');
 const mongoose = require('./config/mongoose');
 
 mongoose.connect();
 
-app.listen(port, () => console.log(`server started on port ${port}`));
+app.listen(config.PORT, () => console.log(`server started on port ${config.PORT}`));

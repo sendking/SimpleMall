@@ -5,11 +5,11 @@
  */
 
 // 用于加密
-var crypto = require('crypto');
-var config = require('../config/config');
+const crypto = require('crypto');
+const config = require('../config/config');
 
 // 用于生成token
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   md5: (pwd) => {
@@ -21,9 +21,9 @@ module.exports = {
    * response
    * @param {Object} res response
    * @param {Number} httpCode 400 500 200 http状态吗
-   * @param {Number} code  -1:登陆超时 0:成功 1: 失败 2:验证失败  3:服务器错误
+   * @param {Number} code  201 202
    */
-  responseClient: function responseClient(res, httpCode = 500, code = 3, message = '服务端异常', data = {}) {
+  responseClient: function responseClient(res, httpCode = 500, code = 202, message = '服务端异常', data = {}) {
     let responseData = {};
     responseData.code = code;
     responseData.message = message;

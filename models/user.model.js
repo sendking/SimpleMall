@@ -4,7 +4,7 @@
  * @Description: file content
  */
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 /**
  * @msg: 用户表结构

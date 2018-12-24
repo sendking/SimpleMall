@@ -3,9 +3,9 @@
  * @Date: 2018-12-23 00:22:42
  * @Description: mongoose的相关配置项
  */
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const mongodbUrl = 'mongodb://0.0.0.0:27017/simplemall';
+const config = require('./config');
 
 mongoose.Promise = Promise;
 
@@ -16,8 +16,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 exports.connect = () => {
-  console.log(`Connecting to mongo @: ${mongodbUrl}`);
-  mongoose.connect(mongodbUrl, {
+  console.log(`Connecting to mongo @: ${config.DB_URL}`);
+  mongoose.connect(config.DB_URL, {
     useNewUrlParser: true
   });
   return mongoose.connection;
@@ -25,7 +25,7 @@ exports.connect = () => {
 
 exports.disconnect = () => {
   mongoose.disconnect(() => {
-    console.log(`disconnect : ${mongodbUrl}`);
+    console.log(`disconnect : ${config.DB_URL}`);
   });
 }
 

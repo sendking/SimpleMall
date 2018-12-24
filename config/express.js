@@ -3,11 +3,11 @@
  * @Date: 2018-12-23 00:04:01
  * @Description: express 配置文件
  */
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 // node中间件 对body进行解析
-var morgan = require('morgan');
-var router = require('../router/index');
+const morgan = require('morgan');
+const router = require('../router/index');
 
 
 const logs = 'dev';

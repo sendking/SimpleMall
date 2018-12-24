@@ -4,9 +4,9 @@
  * @Description: 用户控制器
  */
 
-var UserModel = require('../models/user.model');
-var jwt = require('jsonwebtoken');
-var {
+const UserModel = require('../models/user.model');
+const jwt = require('jsonwebtoken');
+const {
   responseClient,
   md5,
   MD5_SUFFIXSTR

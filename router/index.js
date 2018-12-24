@@ -3,8 +3,8 @@
  * @Date: 2018-12-24 17:11:11
  * @Description: 路由
  */
-var express = require('express');
-var UserController = require('../controller/user.controller');
+const express = require('express');
+const UserController = require('../controller/user.controller');
 
 let Router = express.Router({
   mergeParams: true
