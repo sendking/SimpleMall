@@ -28,45 +28,49 @@ exports.Register = async (req, res, next) => {
 
   // 条件判断
   if (!userName) {
-    responseClient(res, 200, 202, '用户名不为空')
+    responseClient(res, 202, '用户名不为空');
+    next();
   } else if (!passWord) {
-    responseClient(res, 200, 202, '密码不可为空')
-  }
-  // 查询数据库中是否包含当前用户
-  UserModel.findOne({
-    userName: userName
-  }).then(data => {
-    if (data) {
-      responseClient(res, 200, 202, '用户名已存在');
-      next();
-    }
-    // 定义新用户数据结构
-    let user = new UserModel({
-      userName: userName,
-      passWord: md5(passWord + MD5_SUFFIXSTR),
-      type: type,
-      description: '',
-      order: ''
-    });
-    // 讲用户保存到数据库
-    user.save().then(() => {
-      UserModel.findOne({
-        userName: userName
-      }).then(userInfo => {
-        // 保存成功
-        let data = {
-          userName: userInfo.userName,
-          userType: userInfo.type,
-          userId: userInfo._id
-        }
-        // 接口返回
-        responseClient(res, 200, 201, '注册成功', data);
+    responseClient(res, 202, '密码不可为空');
+    next();
+  } else {
+    // 查询数据库中是否包含当前用户
+    UserModel.findOne({
+      userName: userName
+    }).then(data => {
+      if (data) {
+        responseClient(res, 202, '用户名已存在');
         next();
-      })
-    }).catch(err => {
-      // 保存失败
-      responseClient(res, 500, 202, '注册失败,请重新注册', err);
-      next();
+      } else {
+        // 定义新用户数据结构
+        let user = new UserModel({
+          userName: userName,
+          passWord: md5(passWord + MD5_SUFFIXSTR),
+          type: type,
+          description: '',
+          order: ''
+        });
+        // 讲用户保存到数据库
+        user.save().then(() => {
+          UserModel.findOne({
+            userName: userName
+          }).then(userInfo => {
+            // 保存成功
+            let data = {
+              userName: userInfo.userName,
+              userType: userInfo.type,
+              userId: userInfo._id
+            }
+            // 接口返回
+            responseClient(res, 201, '注册成功', data);
+            next();
+          })
+        }).catch(err => {
+          // 保存失败
+          responseClient(res, 202, '注册失败,请重新注册', err);
+          next();
+        });
+      };
     });
-  });
+  }
 }
