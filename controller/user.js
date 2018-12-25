@@ -17,18 +17,19 @@ exports.Register = async (req, res, next) => {
     ) {
       responseClient(res, 202, "用户名已存在");
       next();
-    }
-    const user = new UserModel({
-      userName,
-      passWord: md5(passWord + MD5_SUFFIXSTR),
-      type,
-      description: "", //TODO:
-      order: "" // TODO:
-    });
-    await user.save();
-    if (await UserModel.findOne({ userName })) {
-      responseClient(res, 201, "注册成功", data);
-      next();
+    } else {
+      const user = new UserModel({
+        userName,
+        passWord: md5(passWord + MD5_SUFFIXSTR),
+        type,
+        description: "", //TODO:
+        order: "" // TODO:
+      });
+      await user.save();
+      if (await UserModel.findOne({ userName })) {
+        responseClient(res, 201, "注册成功", data);
+        next();
+      }
     }
   } catch (err) {
     responseClient(res, 202, "注册失败,请重新注册", err);
