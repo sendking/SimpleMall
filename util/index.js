@@ -6,7 +6,7 @@
 
 // 用于加密
 const crypto = require('crypto');
-const config = require('../config/config');
+const config = require('../config/constant');
 
 // 用于生成token
 const jwt = require('jsonwebtoken');
