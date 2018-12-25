@@ -23,11 +23,11 @@ module.exports = {
    * @param {Number} httpCode 400 500 200 http状态吗
    * @param {Number} code  201 202
    */
-  responseClient: function responseClient(res, httpCode = 500, code = 202, message = '服务端异常', data = {}) {
+  responseClient: function responseClient(res, code = 202, message = '服务端异常', data = {}) {
     let responseData = {};
     responseData.code = code;
     responseData.message = message;
     responseData.data = data;
-    res.status(httpCode).json(responseData)
+    res.json(responseData)
   }
 };
