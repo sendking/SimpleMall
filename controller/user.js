@@ -10,11 +10,8 @@ exports.Register = async (req, res, next) => {
     responseClient(res, 202, "密码不为空");
   }
   try {
-    if (
-      await UserModel.findOne({
-        userName
-      })
-    ) {
+    let findUser = await UserModel.findOne({userName})
+    if (findUser) {
       responseClient(res, 202, "用户名已存在");
       next();
     } else {
@@ -26,10 +23,14 @@ exports.Register = async (req, res, next) => {
         order: "" // TODO:
       });
       await user.save();
-      if (await UserModel.findOne({ userName })) {
-        responseClient(res, 201, "注册成功", data);
-        next();
+      let userInfo = await UserModel.findOne({userName})
+      let data = {
+        userName: userInfo.userName,
+        userType: userInfo.type,
+        userId: userInfo._id
       }
+      responseClient(res, 201, "注册成功", data);
+      next();
     }
   } catch (err) {
     responseClient(res, 202, "注册失败,请重新注册", err);
