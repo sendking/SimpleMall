@@ -74,3 +74,72 @@ exports.Register = async (req, res, next) => {
     });
   }
 }
+
+/**
+ * @msg: 用户登录接口
+ * @param {req} Request 请求参数
+ * @param {req} Response 相应参数
+ * @param {next} 下一个中间件
+ * 登陆验证用户成功 生成token并返回
+ */
+exports.Login = async (req, res, next) => {
+  //获取参数
+  let { userName, passWord } = req.body;
+  try {
+    // 查询用户
+    let userInfo = await UserModel.findOne({
+      userName,
+      passWord: md5(passWord + MD5_SUFFIXSTR)
+    });
+
+    if (userInfo) {
+      // 当前用户存在 生产token
+      // jsonwebtoken的文档  https://github.com/auth0/node-jsonwebtoken
+      const token = jwt.sign({
+        name: userInfo.userName,
+        password: passWord,
+        exp: Math.floor(Date.now() / 1000) + (60 * 60)
+      }, 'simplemall');
+
+      responseClient(res, 200, '登陆成功', { token: token });
+      next();
+    } else {
+      // 查询不到
+      responseClient(res, 201, '账号与密码不匹配');
+      next();
+    }
+  } catch (err) {
+    responseClient(res, 201, '服务器内部错误!');
+    next();
+  }
+};
+
+/**
+ * @msg: 获取用户详细信息
+ * @param {req} Request 请求参数
+ * @param {req} Response 相应参数
+ * @param {next} 下一个中间件
+ */
+exports.getUserInfo = async (req, res, next) => {
+  let { userName } = req.query;
+  try {
+
+    // db.collection.findOne(query, projection)
+    // query 可选，使用查询操作符指定查询选择标准。
+    // projection 可选，指定的字段返回使用投影操作符。省略该参数返回匹配文档中所有字段。
+    let userInfo = await UserModel.findOne({
+      userName: userName
+    }, '_id userName type description order');
+    
+    if (userInfo) {
+      responseClient(res, 200, '获取用户信息资料', userInfo);
+      next();
+    } else {
+      responseClient(res, 201, '当前查询用户不存在', userInfo);
+      next();
+    }
+  } catch (err) {
+    responseClient(res, 201, '服务器内部问题', userInfo);
+    next();
+  }
+}

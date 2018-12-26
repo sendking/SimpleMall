@@ -15,5 +15,15 @@ let Router = express.Router({
  */
 Router.post('/register', UserController.Register);
 
+/**
+ * 用户登录
+ */
+Router.post('/login', UserController.Login);
+
+/**
+ * 获取用户信息
+ */
+Router.get('/userinfo', UserController.getUserInfo);
+
 
 module.exports = Router;

@@ -10,7 +10,6 @@ const morgan = require('morgan');
 const router = require('../router/index');
 
 
-const logs = 'dev';
 const app = new express();
 
 app.use(bodyParser.json());
@@ -20,7 +19,7 @@ app.use(bodyParser.urlencoded({
 // true 对body解析可以进行任何数据类型的解析 false时只能解析string 和array类型
 
 // dev 显示console | pro 显示: file
-app.use(morgan(logs));
+app.use(morgan(process.env.NODE_ENV));
 
 
 // 声明路由
