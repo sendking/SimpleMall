@@ -8,9 +8,9 @@ const Router = express.Router({
 });
 
 Router.all("*", (req, res, next) => {
-  if (req.query.token) {
+  if (req.headers.token) {
     try {
-      const decodedToken = jwt.verify(req.query.token, "simplemall");
+      const decodedToken = jwt.verify(req.headers.token, "simplemall");
       if (decodedToken.exp > Math.floor(Date.now() / 1000)) {
         if (
           req.session.userName &&
