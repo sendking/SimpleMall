@@ -70,19 +70,19 @@ exports.Login = async (req, res, next) => {
 };
 
 exports.getUserInfo = async (req, res, next) => {
-  const { userName } = req.query;
   try {
-    const userInfo = await UserModel.findOne(
-      {
-        userName
+    if (req.session.userName) {
+      if (
+        await UserModel.findOne({
+          userName: req.session.userName
+        })
+      ) {
+        responseClient(res, 200, "获取信息成功", userInfo);
+        next();
+      } else {
+        responseClient(res, 201, "用户不存在", userInfo);
+        next();
       }
-    );
-    if (userInfo) {
-      responseClient(res, 200, "获取信息成功", userInfo);
-      next();
-    } else {
-      responseClient(res, 201, "用户不存在", userInfo);
-      next();
     }
   } catch (error) {
     responseClient(res, 201, "服务器内部错误");
