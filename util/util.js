@@ -23,7 +23,6 @@ module.exports = {
    * @param {Number} code  201 202
    */
   responseClient: function responseClient(res, code = 202, message = '服务端异常', data = {}) {
-    console.log('httpcode======' + res.statusCode)
     let responseData = {};
     responseData.code = code;
     responseData.message = message;

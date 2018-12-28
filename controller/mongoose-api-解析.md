@@ -1,15 +1,12 @@
 ## 错误码定义
 
-httpCode | description
---| --
-400 | 服务器无法理解错误
-500 | 服务器错误
-200 | 成功
-
 code | description
 -- | --
 201 | 操作成功
 202 | 操作失败
+101 | 登陆超时
+102 | token失效
+103 | 没有访问权限
 
 ## mongoose API 解析
 

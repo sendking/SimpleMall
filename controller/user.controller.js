@@ -115,22 +115,39 @@ exports.Login = async (req, res, next) => {
 };
 
 /**
+ *  退出登陆
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.Logout = async (req, res, next) => {
+  try {
+    req.session.userName = null;
+    responseClient(res, 200, '退出成功', null)
+    next();
+  } catch (err) {
+    responseClient(res, 201, '退出失败', err);
+    next();
+  }
+}
+
+/**
  * @msg: 获取用户详细信息
  * @param {req} Request 请求参数
  * @param {req} Response 相应参数
  * @param {next} 下一个中间件
  */
 exports.getUserInfo = async (req, res, next) => {
-  let { userName } = req.query;
-  try {
-
+  if (req.session.userName) {
     // db.collection.findOne(query, projection)
     // query 可选，使用查询操作符指定查询选择标准。
     // projection 可选，指定的字段返回使用投影操作符。省略该参数返回匹配文档中所有字段。
-    let userInfo = await UserModel.findOne({
-      userName: userName
-    }, '_id userName type description order');
-    
+    let userInfo = await UserModel.find({
+      userName: req.session.userName
+    }, '_id userName type description order').catch(err => {
+      responseClient(res, 201, '服务器内部问题', userInfo);
+      next();
+    });
     if (userInfo) {
       responseClient(res, 200, '获取用户信息资料', userInfo);
       next();
@@ -138,8 +155,5 @@ exports.getUserInfo = async (req, res, next) => {
       responseClient(res, 201, '当前查询用户不存在', userInfo);
       next();
     }
-  } catch (err) {
-    responseClient(res, 201, '服务器内部问题', userInfo);
-    next();
   }
 }
