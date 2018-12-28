@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const env = process.env.NODE_ENV;
 const app = new express();
 const router = require('../router');
 
@@ -13,5 +12,13 @@ app.use(
 );
 
 app.use('/api', router);
-app.use(morgan(env));
+app.use(morgan(process.env.NODE_ENV));
+app.use(session({
+  secret: 'express_session',
+  resave: true,
+  saveUninitialized: true,
+  cookie:{
+    maxAge: 60 * 1000 * 60 //TODO:
+  }
+}))
 module.exports = app;

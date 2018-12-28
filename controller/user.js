@@ -69,6 +69,15 @@ exports.Login = async (req, res, next) => {
   }
 };
 
+exports.Logout = async (req, res, next) => {
+  try {
+    req.session.userName =null;
+    responseClient(res, 201, '退出成功', null)
+  } catch (err) {
+    responseClient(res, 201, '退出失败', err)
+  }
+};
+
 exports.getUserInfo = async (req, res, next) => {
   try {
     if (req.session.userName) {
