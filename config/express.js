@@ -11,8 +11,6 @@ app.use(
     extended: true
   })
 );
-app.use("/api", router);
-app.use(morgan(process.env.NODE_ENV));
 app.use(
   session({
     secret: "express_cookie",
@@ -24,5 +22,8 @@ app.use(
     // 这里设置的过期时间与token有效时间保持一致
   })
 );
+
+app.use("/api", router);
+app.use(morgan(process.env.NODE_ENV));
 
 module.exports = app;

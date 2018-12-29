@@ -71,21 +71,20 @@ exports.Login = async (req, res, next) => {
 
 exports.Logout = async (req, res, next) => {
   try {
-    req.session.userName =null;
-    responseClient(res, 201, '退出成功', null)
+    req.session.userName = null;
+    responseClient(res, 201, "退出成功", null);
   } catch (err) {
-    responseClient(res, 201, '退出失败', err)
+    responseClient(res, 201, "退出失败", err);
   }
 };
 
 exports.getUserInfo = async (req, res, next) => {
   try {
     if (req.session.userName) {
-      if (
-        await UserModel.findOne({
-          userName: req.session.userName
-        })
-      ) {
+      const userInfo = await UserModel.findOne({
+        userName: req.session.userName
+      });
+      if (userInfo) {
         responseClient(res, 200, "获取信息成功", userInfo);
         next();
       } else {
