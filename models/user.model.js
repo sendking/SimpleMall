@@ -5,7 +5,8 @@
  */
 
 const mongoose = require('mongoose');
-
+// 分页
+const mongoosePaginate = require('mongoose-paginate');
 /**
  * @msg: 用户表结构
  * @param {userName} 用户名
@@ -39,6 +40,7 @@ const User = mongoose.Schema({
     type: String,
   }
 });
-
+// 添加分页插件
+User.plugin(mongoosePaginate);
 const UserModel = mongoose.model('User', User);
 module.exports = UserModel;

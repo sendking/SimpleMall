@@ -157,3 +157,70 @@ exports.getUserInfo = async (req, res, next) => {
     }
   }
 }
+/**
+ * @msg: 更新用户信息
+ * @param {req} Request 请求参数
+ * @param {res} Response 相应参数
+ * @param {next} 下一个中间件
+ */
+exports.update = async (req, res, next) => {
+  let { userName, passWord, description } = req.body;
+  if(req.session.userName) {
+    let updateUserInfo = await UserModel.update({
+      userName: req.session.userName
+    },{
+      userName,
+      passWord: md5(passWord + MD5_SUFFIXSTR),
+      description
+    }).catch(err => responseClient(res, 201, '服务器内部错误', err));
+    if (updateUserInfo) {
+      responseClient(res, 200, '更新成功', {});
+      next();
+    } else {
+      responseClient(res, 201, '更新失败');
+      next();
+    }
+  }
+}
+
+/**
+ * @msg: 提升为管理员
+ * @param {req} Request 请求参数
+ * @param {res} Response 相应参数
+ * @param {next} 下一个中间件
+ */
+exports.promoteAdmin = async (req, res, next) => {
+  let { id } = req.body;
+  let info = await UserModel.findOne({
+    userName: req.session.userName
+  }).catch(err => responseClient(res, 201, '服务器内部错误', err));
+  if (info.type) {
+    UserModel.update({ _id: id }, { type: true }).then(info => {
+      responseClient(res, 200, '用户已提升为管理员',{});
+      next();
+    }).catch(err => responseClient(res, 201, '操作失败', err));
+  } else {
+    responseClient(res, 201, '您没有权限操作', null);
+    next();
+  }
+}
+
+/**
+ * @msg: 获取用户列表
+ * @param {req} Request 请求参数
+ * @param {res} Response 相应参数
+ * @param {next} 下一个中间件
+ */
+exports.userList = async (req, res, next) => {
+  let {
+    pageNum = 1
+  } = req.query;
+  let userList = await UserModel.paginate({},{pageNum, select: '_id userName type description order'}).catch(err => responseClient(res, 201, '服务器内部错误', err))
+  let data = {
+    data: userList.docs,
+    pageTotal: userList.pages,
+    totalNum: userList.page
+  };
+  responseClient(res, 200, '查询成功', data);
+  next();
+}
