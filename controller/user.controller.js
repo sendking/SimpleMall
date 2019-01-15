@@ -97,7 +97,7 @@ exports.Login = async (req, res, next) => {
       // jsonwebtoken的文档  https://github.com/auth0/node-jsonwebtoken
       const token = jwt.sign({
         name: userInfo.userName,
-        password: passWord,
+        userId: userInfo._id,
         exp: Math.floor(Date.now() / 1000) + (60 * 60)
       }, 'simplemall');
 
