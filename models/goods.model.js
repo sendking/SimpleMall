@@ -46,14 +46,12 @@ const Goods = mongoose.Schema({
   create_time: {
     type: Date,
     trim: false,
-    default: Date.now,
-    required: true
+    default: Date.now
   },
   update_time: {
     type: Date,
     trim: true,
-    default: Date.now,
-    required: false
+    default: Date.now
   },
   create_user: {
     type: String,
