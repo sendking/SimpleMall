@@ -49,4 +49,13 @@ Router.post("/login", UserController.Login);
 Router.post("/logout", UserController.Logout);
 // 用户信息获取
 Router.get("/userinfo", UserController.getUserInfo);
+
+// 获取全部用户
+Router.get("/userlist", UserController.userList);
+
+// 更新用户信息
+Router.post("/user", UserController.update);
+
+// 提升为管理员
+Router.post("/promote", UserController.promoteAdmin);
 module.exports = Router;

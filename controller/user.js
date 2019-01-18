@@ -64,7 +64,7 @@ exports.Login = async (req, res, next) => {
       next();
     }
   } catch (error) {
-    responseClient(res, 201, "服务器内部错误");
+    responseClient(res, 201, "服务器内部错误", error);
     next();
   }
 };
@@ -93,7 +93,75 @@ exports.getUserInfo = async (req, res, next) => {
       }
     }
   } catch (error) {
-    responseClient(res, 201, "服务器内部错误");
+    responseClient(res, 201, "服务器内部错误", error);
+    next();
+  }
+};
+
+exports.update = async (req, res, next) => {
+  try {
+    const { userName, passWord, description } = req.body;
+    if (req.session.userName) {
+      const updateUserInfo = await UserModel.update(
+        {
+          userName: req.session.userName
+        },
+        {
+          userName,
+          passWord: md5(passWord + MD5_SUFFIXSTR),
+          description
+        }
+      );
+      if (updateUserInfo) {
+        responseClient(res, 200, "更新成功", {});
+        next();
+      } else {
+        responseClient(res, 201, "更新失败");
+        next();
+      }
+    }
+  } catch (error) {
+    responseClient(res, 201, "服务器内部错误", error);
+    next();
+  }
+};
+
+exports.promoteAdmin = async (req, res, next) => {
+  try {
+    const info = await UserModel.findOne({
+      userName: req.session.userName
+    });
+    if (info.type) {
+      UserModel.update({ _id: req.body.id }, { type: true })
+        .then(info => {
+          responseClient(res, 200, "用户已提升为管理员", {});
+          next();
+        })
+        .catch(err => responseClient(res, 201, "操作失败", err));
+    } else {
+      responseClient(res, 201, "您没有权限操作", null);
+      next();
+    }
+  } catch (error) {
+    responseClient(res, 201, "服务器内部错误", error);
+  }
+};
+
+exports.userList = async (req, res, next) => {
+  try {
+    const { pageNum = 1 } = req.query;
+    const userList = await UserModel.paginate(
+      {},
+      { pageNum, select: "_id userName type description order" }
+    );
+    const data = {
+      data: userList.docs,
+      pageTotal: userList.pages,
+      totalNum: userList.page
+    };
+    responseClient(res, 200, "查询成功", data);
+  } catch (error) {
+    responseClient(res, 201, "服务器内部错误", error);
     next();
   }
 };
