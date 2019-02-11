@@ -1,5 +1,6 @@
 const express = require("express");
 const UserController = require("../controller/user");
+const GoodsController = require("../controller/goods");
 const { responseClient } = require("../util");
 const jwt = require("jsonwebtoken");
 
@@ -58,4 +59,8 @@ Router.post("/user", UserController.update);
 
 // 提升为管理员
 Router.post("/promote", UserController.promoteAdmin);
+
+// 添加商品
+Router.post("/goods", GoodsController.goods);
+
 module.exports = Router;
