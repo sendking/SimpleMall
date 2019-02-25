@@ -61,6 +61,19 @@ Router.post("/user", UserController.update);
 Router.post("/promote", UserController.promoteAdmin);
 
 // 添加商品
-Router.post("/goods", GoodsController.goods);
+Router.post("/goods", GoodsController.addGoods);
+
+// 商品列表
+Router.get('/goodslist', GoodsController.getGoodsList)
+
+// 获取商品详情
+Router.get('/goods/:id', GoodsController.getGoods)
+
+// 更新商品
+Router.put('/goods/:id', GoodsController.putGoods)
+
+// 商品上架、下架
+Router.post('/goods/:id/:status', GoodsController.upperAndlowerGoods)
+
 
 module.exports = Router;

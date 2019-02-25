@@ -28,13 +28,11 @@ const Goods = mongoose.Schema({
     type: Date,
     trim: true,
     default: Date.now,
-    required: true
   },
   update_time: {
     type: Date,
     trim: true,
     default: Date.now,
-    required: false
   },
   create_user: {
     type: String,
